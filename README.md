@@ -2,8 +2,8 @@
 
 This shopping cart demo is built using Rails' ActiveRecord atop a pre-seeded SQLite3 database. You may interact with the database by following the steps outlined here:
 
-1. Run bundle install
-2. Run ```./setup_db.sh``` to create and seed the database
+1. Run ```bundle install```
+2. Run ```bundle exec rake db:schema:load``` and ```bundle exec rake db:seed```
 3. Open rails console in your terminal
 4. Create and save a new instance of Cart. This cart will be defaulted to active, and you may:
 

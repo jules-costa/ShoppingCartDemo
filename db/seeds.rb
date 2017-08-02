@@ -22,9 +22,3 @@ product9 = Product.create!(price: 60.00, title: "swimsuit", available_inventory:
 product10 = Product.create!(price: 75.75, title: "watch", available_inventory: 3)
 product11 = Product.create!(price: 35.00, title: "earrings", available_inventory: 4)
 product12 = Product.create!(price: 350.50, title: "dress", available_inventory: 5)
-
-cart1 = Cart.create!(active: false)
-
-selection1 = Selection.create!(product_id: product1.id, cart_id: cart1.id)
-selection2 = Selection.create!(product_id: product2.id, cart_id: cart1.id)
-selection3 = Selection.create!(product_id: product3.id, cart_id: cart1.id)
