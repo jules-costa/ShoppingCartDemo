@@ -65,7 +65,7 @@ class Cart < ApplicationRecord
   end
 
   def self.active_cart
-    Cart.where(active: true).first
+    Cart.where(active: true).includes(:products).first
   end
 
   def toggle_active(cart)

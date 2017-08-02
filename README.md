@@ -14,14 +14,10 @@ N.B. View the list of products by running ```Product::list```
 #remove_product(title)
 #view_cart
 #checkout
-```
-
-Once you checkout, your cart will become inactive. To keep shopping, please create a new Cart instance.
-
-To view past purchases (an inactive cart is seeded for you) you may call the class method:
-```
 #view_history
 ```
+Once you checkout, your cart will become inactive, and items will be stored in purchase history. To keep shopping, please create a new Cart instance.
+
 
 Notes:
 - Products are indexed by title and price for speedy lookup
