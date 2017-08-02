@@ -24,4 +24,7 @@ product11 = Product.create!(price: 35.00, title: "earrings", available_inventory
 product12 = Product.create!(price: 350.50, title: "dress", available_inventory: 5)
 
 cart1 = Cart.create!(active: false)
-cart2 = Cart.create!
+
+selection1 = Selection.create!(product_id: product1.id, cart_id: cart1.id)
+selection2 = Selection.create!(product_id: product2.id, cart_id: cart1.id)
+selection3 = Selection.create!(product_id: product3.id, cart_id: cart1.id)
