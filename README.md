@@ -7,6 +7,8 @@ This shopping cart demo is built using Rails' ActiveRecord atop a pre-seeded SQL
 3. Open rails console in your terminal
 4. Create and save a new instance of Cart. This cart will be defaulted to active, and you may:
 
+N.B. View the list of products by running ```Product::list```
+
 ```
 #add_product(title)
 #remove_product(title)
