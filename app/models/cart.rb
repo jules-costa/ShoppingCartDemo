@@ -10,47 +10,50 @@ class Cart < ApplicationRecord
     if product.available_inventory == 0
       puts "Sorry, we're out of stock"
     else
-      Selection.create!(product_id: product.id, cart_id: Cart.active_cart.id)
-      self.view_cart
+      Selection.create!(product_id: product.id, cart_id: self.id)
+      self.reload
+      view_cart
     end
   end
 
   def remove_product(title)
-    product = Product.where(title: title).first
-    record = Selection.where(cart_id: Cart.active_cart.id, product_id: product.id).limit(1).first
+    product = Product.find_by(title: title)
+    record = Selection.where(cart_id: self.id, product_id: product.id).first
     Selection.destroy(record.id)
-    self.view_cart
+    self.reload
+    view_cart
   end
 
   def view_cart
-    products = Cart.active_cart.products.to_a
-    'Your Cart: ' + products.map { |product| product.title }.join(", ")
+    items = self.products.to_a
+    'Your Cart: ' + items.map { |item| item.title }.join(", ")
   end
 
   def checkout
+    products = self.products.to_a
+
+    out_of_stock = []
     in_stock = []
-    sold_out = []
-    cart = Cart.active_cart
-    products = cart.products.to_a
 
     products.each do |product|
-      if product.available_inventory > 0
+      if product.available_inventory == 0
+        out_of_stock << product
+      else
         in_stock << product
         product.available_inventory -= 1
         product.save!
-      else
-        sold_out << product
+        product.reload
       end
     end
 
-    self.toggle_active(cart)
-    self.generate_receipt(in_stock)
-    self.display_message(sold_out) if sold_out.length > 0
+    toggle_active
+    generate_receipt(in_stock)
+    display_message(out_of_stock)
   end
 
   def view_history
     purchases = []
-    Cart.inactive_carts.each do |cart|
+    inactive_carts.each do |cart|
       cart.products.to_a.each do |product|
         purchases << product.title
       end
@@ -58,30 +61,26 @@ class Cart < ApplicationRecord
     purchases
   end
 
-  protected
+  private
 
-  def self.inactive_carts
-    Cart.where(active: false).includes(:products).to_a
+  def inactive_carts
+    Cart.where(active: false).to_a
   end
 
-  def self.active_cart
-    Cart.where(active: true).includes(:products).first
-  end
-
-  def toggle_active(cart)
-    cart.active = false
-    cart.save!
+  def toggle_active
+    self.active = false
+    self.save!
   end
 
   def display_message(array)
-    x = array.map { |el| el.title }.join(", ")
-    puts "We're sorry, but we're sold out of: #{x}"
+    items = array.map { |el| el.title }.join(", ")
+    puts "Sorry, we're sold out of #{items}"
   end
 
   def generate_receipt(array)
-    x = array.map { |el| el.title }.join(", ")
+    items = array.map { |el| el.title }.join(", ")
     total = array.map { |el| el.price }.reduce(:+)
-    puts "Thank you for your order of: #{x}"
+    puts "Thank you for your order of: #{items}"
     puts "Your total is: $#{total}"
   end
 
